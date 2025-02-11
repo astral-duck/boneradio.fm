@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BONECOIN Official Platform - Cryptocurrency Trading and Information">
+    <title>BONECOIN</title>
+    <link rel="icon" href="assets/bonepricefavicon.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #video-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            filter: brightness(0.7);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            margin-top: 40px;
+            width: 90%;
+            max-width: 1200px;
+            padding: 0 5%;
+        }
+
+        .bonecoin-title {
+            font-size: 4em;
+            color: #8B0000;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(45deg, #000000dd, #1a0000dd);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 2px solid #450000;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .social-links-bar {
+            background-color: #000000cc;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: flex;
+            gap: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 1.8em;
+            transition: all 0.3s ease;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: #8B0000;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .social-links a::after {
+            content: none;
+        }
+
+        .official-ca-container {
+            background-color: #000000cc;
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+
+        .official-ca-label {
+            font-size: 1.3em;
+            color: #8B0000;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .ca-copy {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            background-color: #1a1a1a;
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        .ca-copy span {
+            font-size: 1.1em;
+            color: #fff;
+            word-break: break-all;
+            flex-grow: 1;
+        }
+
+        .ca-copy button {
+            background: linear-gradient(45deg, #8B0000, #6A0000);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+
+        .ca-copy button:hover {
+            background: linear-gradient(45deg, #6A0000, #8B0000);
+            transform: scale(1.05);
+        }
+
+        #chart {
+            width: 100%;
+            margin: 40px 0;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            height: 650px;
+        }
+
+        #chart.hidden {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #000;
+        }
+
+        #hide-chart-button, #audio-control {
+            position: fixed;
+            background-color: #000000cc;
+            color: #fff;
+            border: 2px solid #8B0000;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            z-index: 1000;
+        }
+
+        #hide-chart-button {
+            top: 20px;
+            left: 20px;
+        }
+
+        #audio-control {
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #audio-control.muted {
+            color: #666;
+            border-color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .bonecoin-title {
+                font-size: 2.5em;
+                padding: 12px 20px;
+            }
+
+            .social-links a {
+                font-size: 1.4em;
+            }
+
+            .official-ca-container {
+                padding: 15px;
+            }
+
+            .ca-copy span {
+                font-size: 0.9em;
+            }
+
+            #chart {
+                height: 400px;
+            }
+
+            #hide-chart-button, #audio-control {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 95%;
+                padding: 0 2.5%;
+            }
+
+            .bonecoin-title {
+                font-size: 2em;
+            }
+
+            .social-links-bar {
+                padding: 12px 20px;
+                gap: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <video id="video-background" autoplay loop muted>
+        <source src="assets/bonepricebackground.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <audio id="background-music" loop playsinline>
+        <source src="assets/boneprice.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="hide-chart-button">Hide Chart</button>
+    <button id="audio-control"><i class="fas fa-volume-up"></i></button>
+
+    <div class="container">
+        <h1 class="bonecoin-title">BONECOIN</h1>
+
+        <div class="social-links-bar">
+            <div class="social-links">
+                <a href="https://t.me/officialbonecoin" target="blank" aria-label="Telegram">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://bonecoin.dev" target="blank" aria-label="Website">
+                    <i class="fas fa-globe"></i>
+                </a>
+                <a href="https://x.com/bonegpt" target="blank" aria-label="X (Twitter)">
+                    <i class="fab fa-x"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="official-ca-container">
+            <div class="official-ca-label">OFFICIAL CONTRACT ADDRESS</div>
+            <div class="ca-copy">
+                <span id="official-ca">BjCmA9ZYwJ1BwusMGaSxe4pgaa9gfXTtdyX27NYEpump</span>
+                <button onclick="copyCA()">COPY</button>
+            </div>
+        </div>
+
+        <div id="chart">
+            <iframe 
+                src="https://www.geckoterminal.com/solana/pools/5AFrQHMgSBxAovKbR3n1fsjmJsEARWzrHzxJJDWhPs6A?embed=1&info=0&swaps=0"
+                title="BONECOIN Price Chart"
+                allow="clipboard-write"
+                loading="eager"
+            ></iframe>
+        </div>
+    </div>
+
+    <script>
+        const audioControl = document.getElementById('audio-control');
+        const backgroundMusic = document.getElementById('background-music');
+        let audioInitialized = false;
+
+        document.addEventListener('click', function initAudio() {
+            if (!audioInitialized) {
+                backgroundMusic.play().catch(() => {
+                    audioControl.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                });
+                audioInitialized = true;
+            }
+        }, { once: true });
+
+        audioControl.addEventListener('click', () => {
+            backgroundMusic.muted = !backgroundMusic.muted;
+            audioControl.classList.toggle('muted');
+            audioControl.innerHTML = backgroundMusic.muted 
+                ? '<i class="fas fa-volume-mute"></i>'
+                : '<i class="fas fa-volume-up"></i>';
+        });
+
+        const hideChartButton = document.getElementById('hide-chart-button');
+        const chartDiv = document.getElementById('chart');
+
+        hideChartButton.addEventListener('click', () => {
+            chartDiv.classList.toggle('hidden');
+            hideChartButton.textContent = chartDiv.classList.contains('hidden') 
+                ? 'Show Chart' 
+                : 'Hide Chart';
+            void chartDiv.offsetWidth;
+        });
+
+        function copyCA() {
+            const caText = document.getElementById('official-ca').textContent;
+            navigator.clipboard.writeText(caText).then(() => {
+                const btn = document.querySelector('.ca-copy button');
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = 'COPY';
+                }, 2000);
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+
+        function adjustViewport() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        window.addEventListener('resize', adjustViewport);
+        adjustViewport();
+    </script>
+</body>
+</html>
