@@ -302,7 +302,6 @@
         </div>
 
         <div id="chart" class="hidden">
-
             <iframe 
                 src="https://www.geckoterminal.com/solana/pools/5AFrQHMgSBxAovKbR3n1fsjmJsEARWzrHzxJJDWhPs6A?embed=1&info=0&swaps=0"
                 title="BONECOIN Price Chart"
@@ -312,17 +311,23 @@
     </div>
 
     <script>
-        // Audio Control System Fix
+        // Audio Control System
         const audioControl = document.getElementById('audio-control');
         const backgroundMusic = document.getElementById('background-music');
-        
-        // Force audio initialization on first click
+        let audioInitialized = false;
+
+        // Initialize audio on first user interaction
         document.addEventListener('click', function initAudio() {
-            backgroundMusic.play().catch(() => {
-                audioControl.innerHTML = '<i class="fas fa-volume-mute"></i>';
-            });
+            if (!audioInitialized) {
+                backgroundMusic.play().catch(error => {
+                    console.error('Audio playback failed:', error);
+                    audioControl.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                });
+                audioInitialized = true;
+            }
         }, { once: true });
 
+        // Toggle mute functionality
         audioControl.addEventListener('click', () => {
             backgroundMusic.muted = !backgroundMusic.muted;
             audioControl.classList.toggle('muted');
@@ -330,6 +335,32 @@
                 ? '<i class="fas fa-volume-mute"></i>'
                 : '<i class="fas fa-volume-up"></i>';
         });
+
+        // Background Cycling System
+        let currentBackground = 1;
+        const videoElement = document.getElementById('video-background');
+
+        function changeBackground(num) {
+            try {
+                currentBackground = num;
+                const newSource = `assets/bonepricebackground${num}.mp4`;
+                videoElement.src = newSource;
+                videoElement.load();
+                videoElement.play()
+                    .catch(error => console.error('Video playback error:', error));
+                
+                // Update button states
+                document.querySelectorAll('.bg-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if(btn.textContent == num) btn.classList.add('active');
+                });
+            } catch (error) {
+                console.error('Background change error:', error);
+            }
+        }
+
+        // Initialize first background
+        videoElement.src = 'assets/bonepricebackground1.mp4';
 
         // Chart Toggle System
         const hideChartButton = document.getElementById('hide-chart-button');
@@ -341,24 +372,6 @@
             hideChartButton.textContent = isHidden ? 'Show Chart' : 'Hide Chart';
         });
 
-        // Background Cycling System
-        let currentBackground = 1;
-        const videoElement = document.getElementById('video-background');
-        function changeBackground(num) {
-            currentBackground = num;
-            videoElement.src = `assets/bonepricebackground${num}.mp4`;
-            videoElement.play();
-            
-            document.querySelectorAll('.bg-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.textContent == num) btn.classList.add('active');
-            });
-        }
-
-        // Initialize systems
-        videoElement.src = 'assets/bonepricebackground1.mp4';
-        backgroundMusic.play().catch(() => {}); // Force autoplay
-
         // Contract Address Copy
         function copyCA() {
             navigator.clipboard.writeText(document.getElementById('official-ca').textContent)
@@ -366,8 +379,18 @@
                     const btn = document.querySelector('.ca-copy button');
                     btn.textContent = 'Copied!';
                     setTimeout(() => btn.textContent = 'COPY', 2000);
-                });
+                })
+                .catch(err => console.error('Copy failed:', err));
         }
+
+        // Error handling for media elements
+        videoElement.addEventListener('error', (e) => {
+            console.error('Video error:', videoElement.error);
+        });
+
+        backgroundMusic.addEventListener('error', (e) => {
+            console.error('Audio error:', backgroundMusic.error);
+        });
     </script>
 </body>
 </html>
