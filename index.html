@@ -44,7 +44,6 @@
             margin-top: 40px;
             width: 90%;
             max-width: 1200px;
-            padding: 0 5%;
         }
 
         #now-playing {
@@ -60,28 +59,19 @@
             z-index: 1000;
             text-align: center;
             font-size: 0.9em;
-            white-space: nowrap;
-            max-width: 300px;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         #background-controls {
             position: fixed;
             left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+            top: calc(15%); /* Adjusted to move it higher */
             display: flex;
             flex-direction: column;
             gap: 8px;
-            z-index: 1000;
-            background-color: #000000cc;
-            padding: 12px 10px;
-            border-radius: 8px;
         }
 
         .bg-btn {
-            background: linear-gradient(45deg, #8B0000, #6A0000);
+            background-color:#8B0000; 
             color: #fff;
             border: 2px solid #450000;
             width: 25px;
