@@ -47,6 +47,79 @@
             padding: 0 5%;
         }
 
+        #now-playing {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #000000cc;
+            padding: 8px 25px;
+            border-radius: 0 0 6px 6px;
+            border: 2px solid #450000;
+            border-top: none;
+            z-index: 1000;
+            text-align: center;
+            font-size: 0.9em;
+            white-space: nowrap;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #background-controls {
+            position: fixed;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 1000;
+            background-color: #000000cc;
+            padding: 12px 10px;
+            border-radius: 8px;
+        }
+
+        .bg-btn {
+            background: linear-gradient(45deg, #8B0000, #6A0000);
+            color: #fff;
+            border: 2px solid #450000;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 0.7em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-btn.active {
+            background: linear-gradient(45deg, #450000, #8B0000);
+            border-color: #fff;
+        }
+
+        #hide-chart-button {
+            border: 2px solid #8B0000;
+            transition: all 0.3s ease;
+        }
+
+        #hide-chart-button.active {
+            border-color: #fff;
+        }
+
+        #audio-control {
+            border: 2px solid #8B0000;
+            transition: all 0.3s ease;
+        }
+
+        #audio-control.muted {
+            border-color: #fff;
+        }
+
         .bonecoin-title {
             font-size: 4em;
             color: #8B0000;
@@ -72,18 +145,12 @@
             color: #fff;
             font-size: 1.8em;
             transition: all 0.3s ease;
-            position: relative;
             text-decoration: none;
         }
 
         .social-links a:hover {
             color: #8B0000;
             transform: translateY(-2px);
-            text-decoration: none;
-        }
-
-        .social-links a::after {
-            content: none;
         }
 
         .official-ca-container {
@@ -131,11 +198,6 @@
             min-width: 100px;
         }
 
-        .ca-copy button:hover {
-            background: linear-gradient(45deg, #6A0000, #8B0000);
-            transform: scale(1.05);
-        }
-
         #chart {
             width: 100%;
             margin: 40px 0;
@@ -164,89 +226,55 @@
             position: fixed;
             background-color: #000000cc;
             color: #fff;
-            border: 2px solid #8B0000;
-            padding: 12px 20px;
+            padding: 10px 16px;
             border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s ease;
             font-family: inherit;
             z-index: 1000;
+            font-size: 0.9em;
         }
 
         #hide-chart-button {
-            top: 20px;
-            left: 20px;
+            top: 18px;
+            left: 18px;
         }
 
         #audio-control {
-            top: 20px;
-            right: 20px;
+            top: 18px;
+            right: 18px;
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        #audio-control.muted {
-            color: #666;
-            border-color: #666;
+            gap: 6px;
         }
 
         @media (max-width: 768px) {
             .bonecoin-title {
                 font-size: 2.5em;
-                padding: 12px 20px;
             }
-
-            .social-links a {
-                font-size: 1.4em;
-            }
-
-            .official-ca-container {
-                padding: 15px;
-            }
-
-            .ca-copy span {
-                font-size: 0.9em;
-            }
-
             #chart {
                 height: 400px;
-            }
-
-            #hide-chart-button, #audio-control {
-                padding: 10px 15px;
-                font-size: 0.9em;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                width: 95%;
-                padding: 0 2.5%;
-            }
-
-            .bonecoin-title {
-                font-size: 2em;
-            }
-
-            .social-links-bar {
-                padding: 12px 20px;
-                gap: 18px;
             }
         }
     </style>
 </head>
 <body>
-    <video id="video-background" autoplay loop muted>
-        <source src="assets/bonepricebackground.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <div id="now-playing">♪ Now Playing: LoFiBonez ♪</div>
+    
+    <div id="background-controls">
+        <button class="bg-btn active" onclick="changeBackground(1)">1</button>
+        <button class="bg-btn" onclick="changeBackground(2)">2</button>
+        <button class="bg-btn" onclick="changeBackground(3)">3</button>
+        <button class="bg-btn" onclick="changeBackground(4)">4</button>
+        <button class="bg-btn" onclick="changeBackground(5)">5</button>
+    </div>
 
-    <audio id="background-music" loop playsinline>
-        <source src="assets/boneprice.mp3" type="audio/mpeg">
+    <video id="video-background" autoplay loop muted></video>
+
+    <audio id="background-music" autoplay loop>
+        <source src="assets/music/lofibonez.mp3" type="audio/mpeg">
     </audio>
 
-    <button id="hide-chart-button">Hide Chart</button>
+    <button id="hide-chart-button">Show Chart</button>
     <button id="audio-control"><i class="fas fa-volume-up"></i></button>
 
     <div class="container">
@@ -254,13 +282,13 @@
 
         <div class="social-links-bar">
             <div class="social-links">
-                <a href="https://t.me/officialbonecoin" target="blank" aria-label="Telegram">
+                <a href="https://t.me/officialbonecoin" target="_blank">
                     <i class="fab fa-telegram"></i>
                 </a>
-                <a href="https://bonecoin.dev" target="blank" aria-label="Website">
+                <a href="https://bonecoin.dev" target="_blank">
                     <i class="fas fa-globe"></i>
                 </a>
-                <a href="https://x.com/bonegpt" target="blank" aria-label="X (Twitter)">
+                <a href="https://x.com/bonegpt" target="_blank">
                     <i class="fab fa-x"></i>
                 </a>
             </div>
@@ -274,28 +302,25 @@
             </div>
         </div>
 
-        <div id="chart">
+        <div id="chart" class="hidden">
             <iframe 
                 src="https://www.geckoterminal.com/solana/pools/5AFrQHMgSBxAovKbR3n1fsjmJsEARWzrHzxJJDWhPs6A?embed=1&info=0&swaps=0"
                 title="BONECOIN Price Chart"
-                allow="clipboard-write"
                 loading="eager"
             ></iframe>
         </div>
     </div>
 
     <script>
+        // Audio Control System Fix
         const audioControl = document.getElementById('audio-control');
         const backgroundMusic = document.getElementById('background-music');
-        let audioInitialized = false;
-
+        
+        // Force audio initialization on first click
         document.addEventListener('click', function initAudio() {
-            if (!audioInitialized) {
-                backgroundMusic.play().catch(() => {
-                    audioControl.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                });
-                audioInitialized = true;
-            }
+            backgroundMusic.play().catch(() => {
+                audioControl.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            });
         }, { once: true });
 
         audioControl.addEventListener('click', () => {
@@ -306,36 +331,43 @@
                 : '<i class="fas fa-volume-up"></i>';
         });
 
+        // Chart Toggle System
         const hideChartButton = document.getElementById('hide-chart-button');
         const chartDiv = document.getElementById('chart');
 
         hideChartButton.addEventListener('click', () => {
-            chartDiv.classList.toggle('hidden');
-            hideChartButton.textContent = chartDiv.classList.contains('hidden') 
-                ? 'Show Chart' 
-                : 'Hide Chart';
-            void chartDiv.offsetWidth;
+            const isHidden = chartDiv.classList.toggle('hidden');
+            hideChartButton.classList.toggle('active', !isHidden);
+            hideChartButton.textContent = isHidden ? 'Show Chart' : 'Hide Chart';
         });
 
-        function copyCA() {
-            const caText = document.getElementById('official-ca').textContent;
-            navigator.clipboard.writeText(caText).then(() => {
-                const btn = document.querySelector('.ca-copy button');
-                btn.textContent = 'Copied!';
-                setTimeout(() => {
-                    btn.textContent = 'COPY';
-                }, 2000);
-            }).catch(err => {
-                console.error('Copy failed:', err);
+        // Background Cycling System
+        let currentBackground = 1;
+        const videoElement = document.getElementById('video-background');
+        function changeBackground(num) {
+            currentBackground = num;
+            videoElement.src = `assets/bonepricebackground${num}.mp4`;
+            videoElement.play();
+            
+            document.querySelectorAll('.bg-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.textContent == num) btn.classList.add('active');
             });
         }
 
-        function adjustViewport() {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        // Initialize systems
+        videoElement.src = 'assets/bonepricebackground1.mp4';
+        backgroundMusic.play().catch(() => {}); // Force autoplay
+
+        // Contract Address Copy
+        function copyCA() {
+            navigator.clipboard.writeText(document.getElementById('official-ca').textContent)
+                .then(() => {
+                    const btn = document.querySelector('.ca-copy button');
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => btn.textContent = 'COPY', 2000);
+                });
         }
-        window.addEventListener('resize', adjustViewport);
-        adjustViewport();
     </script>
 </body>
 </html>
